@@ -22,13 +22,16 @@ namespace WeatherBot
 
         public static void Main(string[] args)
         {
+            string webHook = "http://a1111-7831a.s2.deploy-f.com";
+
             //Инициализация бота
             var proxy = new HttpToSocks5Proxy("198.46.205.105", 1080);
-            client = new TelegramBotClient("1433964059:AAFNtXF_N22wZU0ha7Ye5b9DoWxHa4cSgx4") { Timeout = TimeSpan.FromSeconds(10)};
+            client = new TelegramBotClient("1460640304:AAHeucVR2KqbcQKvPktCL_Wj2gTdXlVpCPs") { Timeout = TimeSpan.FromSeconds(10)};
 
             var me = client.GetMeAsync().Result;
             Console.WriteLine($"Bot_Id: {me.Id} \nBot_Name: {me.FirstName} ");
 
+            client.SetWebhookAsync(webHook).Wait();
             client.OnMessage += Bot_OnMessage;
             client.OnMessageEdited += Bot_OnMessage;
             client.StartReceiving();
