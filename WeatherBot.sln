@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherBot", "WeatherBot\WeatherBot.csproj", "{EE2AAA8D-D6B8-482C-8E86-6CD02AD67924}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE2AAA8D-D6B8-482C-8E86-6CD02AD67924}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE2AAA8D-D6B8-482C-8E86-6CD02AD67924}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE2AAA8D-D6B8-482C-8E86-6CD02AD67924}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE2AAA8D-D6B8-482C-8E86-6CD02AD67924}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2D5BD08-5AD2-4AFB-9609-2F00E5A7981D}
+	EndGlobalSection
+EndGlobal
