@@ -20,6 +20,10 @@ namespace WeatherBot
         public static float tempOfCity;
         public static string nameOfCity;
 
+        public static char[] myArray;
+
+        public static string answerOnWether;
+
 
         public static void Main(string[] args)
         {
@@ -45,16 +49,28 @@ namespace WeatherBot
         {
             var message = e.Message;
 
+            var word = message.Text.ToCharArray();
+            myArray = word;
+            var slash = myArray[0].ToString();
+
             if (message.Type == MessageType.Text)
             {
                 if (message.Text == "/start")
+                {
+                    await client.SendTextMessageAsync(message.Chat.Id, "Здравствуйте, напишите любой город и я вам скажу какая температура в этом городе!");
                     return;
+                }
+                else if (slash == "/")
+                {
+                    await client.SendTextMessageAsync(message.Chat.Id, "На даный момент команды со знаком \"/\" не работают, кроме комманды \"/start\"! ");
+                    return;
+                }
 
                 NameCity = message.Text;
-                Weather(NameCity);
-
+                SettingsFromCity();
+                await client.SendTextMessageAsync(message.Chat.Id, $"{answerOnWether} \n\nТемпература в {nameOfCity}: {Math.Round(tempOfCity)} °C");    
+               
                 Console.WriteLine(message.Text);
-                await client.SendTextMessageAsync(message.Chat.Id, $"Температура в {nameOfCity}: {Math.Round(tempOfCity)} °C");
             }
 
         }
@@ -76,6 +92,21 @@ namespace WeatherBot
             tempOfCity = weatherResponse.Main.Temp - 273;
 
             return cityName;
+        }
+
+        public static void Celsius(float celsius)
+        {
+            if (celsius <= 10)
+                answerOnWether = "Сегодня холодно одевайся потеплее!";
+            else
+                answerOnWether = "Сегодня очень жарко, так что можешь одеть маечку и шортики)";
+
+        }
+
+        public static void SettingsFromCity()
+        {
+            Weather(NameCity);
+            Celsius(tempOfCity);
         }
     }
 }
