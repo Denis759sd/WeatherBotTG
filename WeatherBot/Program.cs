@@ -77,19 +77,27 @@ namespace WeatherBot
 
         public static string Weather(string cityName)
         {
-            string url = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&unit=metric&appid=2351aaee5394613fc0d14424239de2bd";
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest?.GetResponse();
-            string response;
-
-            using (StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream()))
+            try
             {
-                response = streamReader.ReadToEnd();
-            }
-            WeatherResponse weatherResponse = JsonConvert.DeserializeObject<WeatherResponse>(response);
+                string url = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&unit=metric&appid=2351aaee5394613fc0d14424239de2bd";
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest?.GetResponse();
+                string response;
 
-            nameOfCity = weatherResponse.Name;
-            tempOfCity = weatherResponse.Main.Temp - 273;
+                using (StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream()))
+                {
+                    response = streamReader.ReadToEnd();
+                }
+                WeatherResponse weatherResponse = JsonConvert.DeserializeObject<WeatherResponse>(response);
+
+                nameOfCity = weatherResponse.Name;
+                tempOfCity = weatherResponse.Main.Temp - 273;
+            }
+            catch (System.Net.WebException)
+            {
+                Console.WriteLine("Возникло исключение");
+                return null;
+            }
 
             return cityName;
         }
