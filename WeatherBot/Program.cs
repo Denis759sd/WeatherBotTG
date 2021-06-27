@@ -1,81 +1,53 @@
-﻿using MihaZupan;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Net;
 using Telegram.Bot;
 using Telegram.Bot.Args;
-using Telegram.Bot.Requests;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
 
 namespace WeatherBot
 {
     class Program
     {
-        private static ITelegramBotClient client;
+        private static string token { get; set; } = "1777883319:AAEf88h8_El6kJ2U7ahxukVeK9MH9S0wyog";
+        private static TelegramBotClient client;
 
-        public static string NameCity;
-        public static float tempOfCity;
-        public static string nameOfCity;
+        static string NameCity;
+        static float tempOfCity;
+        static string nameOfCity;
 
-        public static char[] myArray;
-
-        public static string answerOnWether;
-
+        static string answerOnWether;
 
         public static void Main(string[] args)
         {
-            string webHook = "https://a1111-7831a.s2.deploy-f.com";
-
-            //Инициализация бота
-            var proxy = new HttpToSocks5Proxy("198.46.205.105", 1080);
-            client = new TelegramBotClient("1302247747:AAF4kJCZ7NAZmE0H649mtSsve6VpLUfix5Y") { Timeout = TimeSpan.FromSeconds(10)};
+            client = new TelegramBotClient(token) { Timeout = TimeSpan.FromSeconds(10)};
 
             var me = client.GetMeAsync().Result;
             Console.WriteLine($"Bot_Id: {me.Id} \nBot_Name: {me.FirstName} ");
-
-            //client.SetWebhookAsync(webHook).Wait();
+            
             client.OnMessage += Bot_OnMessage;
-            client.OnMessageEdited += Bot_OnMessage;
             client.StartReceiving();
             Console.ReadLine();
             client.StopReceiving();
-            
         }
 
         private static async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
             var message = e.Message;
 
-            var word = message.Text.ToCharArray();
-            myArray = word;
-            var slash = myArray[0].ToString();
-
             if (message.Type == MessageType.Text)
             {
-                if (message.Text == "/start")
-                {
-                    await client.SendTextMessageAsync(message.Chat.Id, "Здравствуйте, напишите любой город и я вам скажу какая температура в этом городе!");
-                    return;
-                }
-                else if (slash == "/")
-                {
-                    await client.SendTextMessageAsync(message.Chat.Id, "На даный момент команды со знаком \"/\" не работают, кроме комманды \"/start\"! ");
-                    return;
-                }
-
                 NameCity = message.Text;
-                SettingsFromCity();
+                Weather(NameCity);
+                Celsius(tempOfCity);
                 await client.SendTextMessageAsync(message.Chat.Id, $"{answerOnWether} \n\nТемпература в {nameOfCity}: {Math.Round(tempOfCity)} °C");    
                
                 Console.WriteLine(message.Text);
             }
-
         }
 
-        public static string Weather(string cityName)
+        public static void Weather(string cityName)
         {
             try
             {
@@ -96,10 +68,8 @@ namespace WeatherBot
             catch (System.Net.WebException)
             {
                 Console.WriteLine("Возникло исключение");
-                return null;
+                return;
             }
-
-            return cityName;
         }
 
         public static void Celsius(float celsius)
@@ -108,13 +78,6 @@ namespace WeatherBot
                 answerOnWether = "Сегодня холодно одевайся потеплее!";
             else
                 answerOnWether = "Сегодня очень жарко, так что можешь одеть маечку и шортики)";
-
-        }
-
-        public static void SettingsFromCity()
-        {
-            Weather(NameCity);
-            Celsius(tempOfCity);
         }
     }
 }
